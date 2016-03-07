@@ -59,17 +59,18 @@ if (PAUSING == "yes"):
 
 logging.info("autoPasswordChanger for coursechoose.bjtu.edu.cn v1.0")
 
+try:
+    logging.info("PhantomJS driver initialization")
+    driver = webdriver.PhantomJS()
+    logging.info(
+        "Setting window size to bigger size because responsivness in China is None...")
+    driver.set_window_size(1000, 1000)
+except Exception:
+    logging.error("Something went wrong with the initialization...")
 
 logging.info("Waiting for system initialization...")
 while (not password_changed):
     try:
-        logging.info("PhantomJS driver initialization")
-        driver = webdriver.PhantomJS()
-
-        logging.info(
-            "Setting window size to bigger size because responsivness in China is None...")
-        driver.set_window_size(1000, 1000)
-
         logging.info("Retrieving http://coursechoose.bjtu.edu.cn ...")
         driver.get("http://coursechoose.bjtu.edu.cn/")
         element = WebDriverWait(driver, 10).until(
@@ -93,11 +94,11 @@ while (not password_changed):
         changePassword()
         logging.info("Password successfully changed...")
         logging.info("Closing the driver...")
-        driver.quit()
         logging.info("Password is safe my friend!")
         password_changed = True
     except Exception:
         logging.info("YOU ARE NOT CONNECTED")
         logging.info("IT IS STILL SAFE!")
+    finally:
         logging.info("Closing the driver...")
         driver.quit()
